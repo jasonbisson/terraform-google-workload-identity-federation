@@ -85,3 +85,22 @@ resource "google_service_account_iam_policy" "admin-account-iam" {
   service_account_id = google_service_account.wif.name
   policy_data        = data.google_iam_policy.wif.policy_data
 }
+
+
+resource "google_project_iam_member" "binding" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.wif.email}"
+}
+
+resource "null_resource" "create_creds" {
+  provisioner "local-exec" {
+    command = <<EOF
+    gcloud iam workload-identity-pools create-cred-config \
+    ${google_iam_workload_identity_pool.pool.workload_identity_pool_id} \
+    --service-account=${google_service_account.wif.name} \
+    --output-file=/tmp/sts.json \
+    --credential-source-file=/tmp/okta-token.json 
+    EOF
+  }
+}

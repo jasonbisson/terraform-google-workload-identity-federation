@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-module "workload_identity_federation" {
-  source = "../.."
+resource "random_id" "random_suffix" {
+  byte_length = 4
+}
 
-  project_id  = var.project_id
-  bucket_name = var.bucket_name
+
+resource "google_storage_bucket" "batch_data" {
+  project                     = var.project_id
+  name                        = "wif-${random_id.random_suffix.hex}"
+  location = var.default_region
+  force_destroy = true
+  uniform_bucket_level_access = true
+  versioning {
+    enabled = true
+  }
 }
