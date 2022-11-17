@@ -93,14 +93,20 @@ resource "google_project_iam_member" "binding" {
   member  = "serviceAccount:${google_service_account.wif.email}"
 }
 
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
 resource "null_resource" "create_creds" {
   provisioner "local-exec" {
     command = <<EOF
     gcloud iam workload-identity-pools create-cred-config \
-    ${google_iam_workload_identity_pool.pool.workload_identity_pool_id} \
+    projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.idp_provider.workload_identity_pool_provider_id}
     --service-account=${google_service_account.wif.name} \
     --output-file=/tmp/sts.json \
-    --credential-source-file=/tmp/okta-token.json 
+    --credential-source-type=json \
+    --credential-source-file=/tmp/okta-token.json \
+    --credential-source-field-name=access_token
     EOF
   }
 }
