@@ -1,0 +1,15 @@
+environment = "wif"
+project_id  = ""
+pool_id     = "okta"
+provider_id = "okta-oidc"
+attribute_mapping = {
+  "google.subject"       = "assertion.sub"
+  "attribute.actor"      = "assertion.actor"
+  "attribute.aud"        = "assertion.aud"
+  "attribute.repository" = "assertion.repository"
+}
+
+issuer_uri = ""
+subject =""
+
+
