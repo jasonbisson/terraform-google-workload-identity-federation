@@ -11,13 +11,44 @@ The resources/services/activations/deletions that this module will create/trigge
 
 ## Usage
 
+## Prerequisites
+
+### Create Okta Authorization Server
+/*
+1. Login to Okta admin console
+2. Go to Security->API
+3. Authorization Server
+4. Define a new authorization server , note the issuer URL — you’ll need this to configure OIDC provider in Google Cloud
+5. Set audience (could be anything that is mutually verifiable, preferably unique), note the audience — you’ll need this to configure OIDC provider in Google Cloud
+6. Define a new scope, set this scope as a default scope
+7. Define a new claim. Customize this claim to your requirement of attribute verification in Google Cloud
+8. Go to access policies, make sure its Assigned to “All Clients”
+*/
+
+### Collect Okta variables for Google Cloud deployment
+/*
+1. issuer_uri = ""
+2. subject =""
+3. allowed_audiences = [ "" ]
+*/
+
+### Generate Okta OIDC Token 
+/*
+* Set required variables in Operating System
+* export OKTA_AZ_SERVER="https://<Your Okta Auth server>/v1/token"
+* export CLIENT_ID=""
+* export CLIENT_SECRET=""
+* cd files
+* python get_oidc_token.py
+* cat /tmp/okta-token.json
+*/
+
 Basic usage of this module is as follows:
 
 ```hcl
 module "workload_identity_federation" {
   source  = "terraform-google-modules/workload-identity-federation/google"
   version = "~> 0.1"
-
 
 }
 ```
