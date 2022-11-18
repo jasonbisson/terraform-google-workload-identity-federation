@@ -53,6 +53,7 @@ mv terraform.tvfars.template terraform.tvfars
 ```
 3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation creditial file
 ```
+cd terraform-google-workload-identity-federation/
 terraform init
 terraform plan
 terraform apply
@@ -61,17 +62,29 @@ terraform apply
 ```
 cd terraform-google-workload-identity-federation/examples/simple_example
 export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
-
 terraform init
 terraform plan
 terraform apply
+terraform destroy
+unset GOOGLE_APPLICATION_CREDENTIALS
+```
 
-Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
-
+5. Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
+```
 authenticationInfo: {
 principalEmail: "Your service account@Your Project ID.iam.gserviceaccount.com"serviceAccountDelegationInfo: [
 principalSubject: "principal://iam.googleapis.com/projects/Your Project Number/locations/global/workloadIdentityPools/Your IDP Provider/subject/Your subject"
 }authorizationInfo: [1]methodName: "storage.buckets.create"
+```
+
+## Cleanup Workload Identity Federation Infrastructure and local token files
+1. Execute Terraform destroy command with existing identity (human or service account) 
+```
+unset GOOGLE_APPLICATION_CREDENTIALS
+cd terraform-google-workload-identity-federation/
+terraform destroy
+rm /tmp/sts.json 
+rm /tmp/okta-token.json
 ```
 
 
