@@ -3,18 +3,18 @@
 This module will will deploy a Workload Identity Pool, Provider, and Service Account that will be impersonated by an external identity. In addition a script is available to generate a OIDC token to run through the token exchange dance.
 
 The resources/services/activations/deletions that this module will create/trigger are:
-
+- Generate an Okta OIDC Token 
 - Create a Workload Identity Pool
 - Create a Workload Identity Provider
+- Disable Service Account Key creation in project
 - Create a Service Account 
-- Update IAM Policy to Impersonate an external Identity via attributes/claims
+- Update IAM Policy to impersonate the new Service Account via attributes/claims
 
 ## Usage
 
 ## Prerequisites
 
 ### Create Okta Authorization Server
-/*
 1. Login to Okta admin console
 2. Go to Security->API
 3. Authorization Server
@@ -23,38 +23,51 @@ The resources/services/activations/deletions that this module will create/trigge
 6. Define a new scope, set this scope as a default scope
 7. Define a new claim. Customize this claim to your requirement of attribute verification in Google Cloud
 8. Go to access policies, make sure its Assigned to “All Clients”
-*/
 
 ### Collect Okta variables for Google Cloud deployment
-/*
-1. issuer_uri = ""
-2. subject =""
-3. allowed_audiences = [ "" ]
-*/
+* issuer_uri = ""
+* subject =""
+* allowed_audiences = [ "" ]
 
-### Generate Okta OIDC Token 
-/*
+### Generate Okta OIDC Token file
 * Set required variables in Operating System
 * export OKTA_AZ_SERVER="https://<Your Okta Auth server>/v1/token"
-* export CLIENT_ID=""
-* export CLIENT_SECRET=""
+* export CLIENT_ID="<Your Client ID>"
+* export CLIENT_SECRET="<Your Client Secret or command to pull secret from a secrets manager platform>"
 * cd files
 * python get_oidc_token.py
 * cat /tmp/okta-token.json
-*/
 
-Basic usage of this module is as follows:
+## Usage
+1. Clone repo
 
-```hcl
-module "workload_identity_federation" {
-  source  = "terraform-google-modules/workload-identity-federation/google"
-  version = "~> 0.1"
+2. Rename and ppdate required variables in terraform.tvfars.template 
+```
+mv terraform.tvfars.template terraform.tvfars
+```
+3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation creditial file
+```
+terraform init
+terraform plan
+terraform apply
+```
+4. Deploy Storage Bucket with new Workload Identity Creditial file
+```
+cd terraform-google-workload-identity-federation/examples/simple_example
+export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
 
-}
+terraform init
+terraform plan
+terraform apply
+
+Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
+
+authenticationInfo: {
+principalEmail: "<Your service account>@<Your Project ID>.iam.gserviceaccount.com"serviceAccountDelegationInfo: [
+principalSubject: "principal://iam.googleapis.com/projects/<Your Project Number>/locations/global/workloadIdentityPools/<Your IDP Provider>/subject/<Your subject>"
+}authorizationInfo: [1]methodName: "storage.buckets.create"
 ```
 
-Functional examples are included in the
-[examples](./examples/) directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -96,7 +109,7 @@ These sections describe requirements for using this module.
 The following dependencies must be available:
 
 - [Terraform][terraform] v0.13
-- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.0
+- [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.61 or above
 
 ### Service Account
 
@@ -132,3 +145,7 @@ information on contributing to this module.
 ## Security Disclosures
 
 Please see our [security disclosure process](./SECURITY.md).
+
+## Troubleshooting 
+
+1. Okta OIDC token will time out if the terraform deployment is delayed
