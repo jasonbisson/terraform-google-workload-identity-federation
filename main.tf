@@ -101,8 +101,8 @@ resource "null_resource" "create_creds" {
   provisioner "local-exec" {
     command = <<EOF
     gcloud iam workload-identity-pools create-cred-config \
-    projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.idp_provider.workload_identity_pool_provider_id}
-    --service-account=${google_service_account.wif.name} \
+    projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.pool.workload_identity_pool_id}/providers/${google_iam_workload_identity_pool_provider.idp_provider.workload_identity_pool_provider_id} \
+    --service-account=${google_service_account.wif.email} \
     --output-file=/tmp/sts.json \
     --credential-source-type=json \
     --credential-source-file=/tmp/okta-token.json \
