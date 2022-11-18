@@ -10,8 +10,6 @@ The resources/services/activations/deletions that this module will create/trigge
 - Create a Service Account 
 - Update IAM Policy to impersonate the new Service Account via attributes/claims
 
-## Usage
-
 ## Prerequisites
 
 ### Create Okta Authorization Server
