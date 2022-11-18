@@ -29,17 +29,6 @@ subject =""
 allowed_audiences = [ "" ]
 ```
 
-### Generate Okta OIDC Token file
-```
-Set required variables in Operating System
-export OKTA_AZ_SERVER="https://Your Okta Auth server/v1/token"
-export CLIENT_ID="Your Client ID"
-export CLIENT_SECRET="Your Client Secret or command to pull secret from a secrets manager platform"
-cd files
-python get_oidc_token.py
-cat /tmp/okta-token.json
-```
-
 ## Usage
 1. Clone repo
 ```
@@ -47,7 +36,7 @@ git clone https://github.com/jasonbisson/terraform-google-workload-identity-fede
 
 ```
 
-2. Rename and ppdate required variables in terraform.tvfars.template 
+2. Rename and update required variables in terraform.tvfars.template 
 ```
 mv terraform.tvfars.template terraform.tvfars
 ```
@@ -58,7 +47,19 @@ terraform init
 terraform plan
 terraform apply
 ```
-4. Deploy Storage Bucket with new Workload Identity creditial file
+
+4. Generate Okta OIDC Token file
+```
+Set required variables in Operating System
+export OKTA_AZ_SERVER="https://Your Okta Auth server/v1/token"
+export CLIENT_ID="Your Client ID"
+export CLIENT_SECRET="Your Client Secret or command to pull secret from a secrets manager platform"
+cd files
+python get_oidc_token.py
+cat /tmp/okta-token.json
+```
+
+5. Deploy Storage Bucket with new Workload Identity creditial file
 ```
 cd terraform-google-workload-identity-federation/examples/simple_example
 export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
@@ -69,7 +70,7 @@ terraform destroy
 unset GOOGLE_APPLICATION_CREDENTIALS
 ```
 
-5. Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
+6. Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
 ```
 authenticationInfo: {
 principalEmail: "Your service account@Your Project ID.iam.gserviceaccount.com"serviceAccountDelegationInfo: [
@@ -130,23 +131,24 @@ The following dependencies must be available:
 - [Terraform][terraform] v0.13
 - [Terraform Provider for GCP][terraform-provider-gcp] plugin v3.61 or above
 
-### Service Account
+### Infrastructure deployment Account
 
-A service account with the following roles must be used to provision
+A account with the following roles must be used to provision
 the resources of this module:
 
-- Storage Admin: `roles/storage.admin`
-
-The [Project Factory module][project-factory-module] and the
-[IAM module][iam-module] may be used in combination to provision a
-service account with the necessary roles applied.
+- Identity Pool Admin: `roles/iam.workloadIdentityPoolAdmin`
+- Security Admin: `roles/iam.securityAdmin`
 
 ### APIs
 
 A project with the following APIs enabled must be used to host the
 resources of this module:
 
-- Google Cloud Storage JSON API: `storage-api.googleapis.com`
+- Secure Token Service: `sts.googleapis.com`
+- IAM Credentials: `iamcredentials.googleapis.com`
+- Cloud Resource Manager: `cloudresourcemanager.googleapis.com`
+- IAM: `iam.googleapis.com`
+- Google Cloud Storage: `storage.googleapis.com`
 
 The [Project Factory module][project-factory-module] can be used to
 provision a project with the necessary APIs enabled.
