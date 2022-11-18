@@ -24,22 +24,30 @@ The resources/services/activations/deletions that this module will create/trigge
 7. Define a new claim. Customize this claim to your requirement of attribute verification in Google Cloud
 8. Go to access policies, make sure its Assigned to “All Clients”
 
-### Collect Okta variables for Google Cloud deployment
-* issuer_uri = ""
-* subject =""
-* allowed_audiences = [ "" ]
+### Collect Okta variables for Google Cloud infrastructure deployment
+```
+issuer_uri = ""
+subject =""
+allowed_audiences = [ "" ]
+```
 
 ### Generate Okta OIDC Token file
-* Set required variables in Operating System
-* export OKTA_AZ_SERVER="https://<Your Okta Auth server>/v1/token"
-* export CLIENT_ID="<Your Client ID>"
-* export CLIENT_SECRET="<Your Client Secret or command to pull secret from a secrets manager platform>"
-* cd files
-* python get_oidc_token.py
-* cat /tmp/okta-token.json
+```
+Set required variables in Operating System
+export OKTA_AZ_SERVER="https://Your Okta Auth server/v1/token"
+export CLIENT_ID="Your Client ID"
+export CLIENT_SECRET="Your Client Secret or command to pull secret from a secrets manager platform"
+cd files
+python get_oidc_token.py
+cat /tmp/okta-token.json
+```
 
 ## Usage
 1. Clone repo
+```
+git clone https://github.com/jasonbisson/terraform-google-workload-identity-federation.git
+
+```
 
 2. Rename and ppdate required variables in terraform.tvfars.template 
 ```
@@ -51,7 +59,7 @@ terraform init
 terraform plan
 terraform apply
 ```
-4. Deploy Storage Bucket with new Workload Identity Creditial file
+4. Deploy Storage Bucket with new Workload Identity creditial file
 ```
 cd terraform-google-workload-identity-federation/examples/simple_example
 export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
@@ -63,8 +71,8 @@ terraform apply
 Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
 
 authenticationInfo: {
-principalEmail: "<Your service account>@<Your Project ID>.iam.gserviceaccount.com"serviceAccountDelegationInfo: [
-principalSubject: "principal://iam.googleapis.com/projects/<Your Project Number>/locations/global/workloadIdentityPools/<Your IDP Provider>/subject/<Your subject>"
+principalEmail: "Your service account@Your Project ID.iam.gserviceaccount.com"serviceAccountDelegationInfo: [
+principalSubject: "principal://iam.googleapis.com/projects/Your Project Number/locations/global/workloadIdentityPools/Your IDP Provider/subject/Your subject"
 }authorizationInfo: [1]methodName: "storage.buckets.create"
 ```
 
