@@ -38,7 +38,7 @@ git clone https://github.com/jasonbisson/terraform-google-workload-identity-fede
 
 2. Rename and update required variables in terraform.tvfars.template 
 ```
-mv terraform.tvfars.template terraform.tvfars
+mv terraform.tfvars.template terraform.tfvars
 ```
 3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation creditial file
 ```
