@@ -22,8 +22,8 @@ resource "random_id" "random_suffix" {
 resource "google_storage_bucket" "batch_data" {
   project                     = var.project_id
   name                        = "wif-${random_id.random_suffix.hex}"
-  location = var.default_region
-  force_destroy = true
+  location                    = var.default_region
+  force_destroy               = true
   uniform_bucket_level_access = true
   versioning {
     enabled = true

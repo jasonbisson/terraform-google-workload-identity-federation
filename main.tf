@@ -43,7 +43,7 @@ resource "google_service_account" "wif" {
 }
 
 resource "google_iam_workload_identity_pool" "pool" {
-  provider = google-beta
+  provider                  = google-beta
   project                   = var.project_id
   workload_identity_pool_id = "${var.pool_id}-${random_id.random_suffix.hex}"
   display_name              = var.pool_display_name
@@ -52,7 +52,7 @@ resource "google_iam_workload_identity_pool" "pool" {
 }
 
 resource "google_iam_workload_identity_pool_provider" "idp_provider" {
-  provider = google-beta
+  provider                  = google-beta
   project                   = var.project_id
   workload_identity_pool_id = google_iam_workload_identity_pool.pool.workload_identity_pool_id
 

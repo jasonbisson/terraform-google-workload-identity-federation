@@ -3,11 +3,11 @@
 This module will deploy a Workload Identity Pool, Provider, and Service Account that an external identity will impersonate. In addition, a python script is available to generate an OIDC token.
 
 The resources/services/activations/deletions that this module will create/trigger are:
-- Generate an Okta OIDC Token 
+- Generate an Okta OIDC Token
 - Create a Workload Identity Pool
 - Create a Workload Identity Provider
 - Disable Service Account Key creation in project
-- Create a Service Account 
+- Create a Service Account
 - Update IAM Policy to impersonate the new Service Account via attributes/claims
 
 ## Prerequisites
@@ -36,10 +36,10 @@ git clone https://github.com/jasonbisson/terraform-google-workload-identity-fede
 
 ```
 
-2. Rename and update required variables in terraform.tvfars.template 
+2. Rename and update required variables in terraform.tvfars.template
 ```
 mv terraform.tfvars.template terraform.tfvars
-#Update required variables 
+#Update required variables
 ```
 3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation credential file
 ```
@@ -66,7 +66,7 @@ cd ~/terraform-google-workload-identity-federation/examples/simple_example
 export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
 #Rename and update required project_id
 mv terraform.tfvars.template terraform.tfvars
-#Update required variables 
+#Update required variables
 terraform init
 terraform plan
 terraform apply
@@ -81,12 +81,12 @@ gcloud logging read protoPayload.methodName="storage.buckets.create" --freshness
 ```
 
 ## Destroy Workload Identity Federation Infrastructure and local token files
-1. Execute Terraform destroy command with existing identity (human or service account) 
+1. Execute Terraform destroy command with existing identity (human or service account)
 ```
 unset GOOGLE_APPLICATION_CREDENTIALS
 cd ~/terraform-google-workload-identity-federation/
 terraform destroy
-rm /tmp/sts.json 
+rm /tmp/sts.json
 rm /tmp/okta-token.json
 ```
 
@@ -169,6 +169,6 @@ information on contributing to this module.
 
 Please see our [security disclosure process](./SECURITY.md).
 
-## Troubleshooting 
+## Troubleshooting
 
 1. Okta OIDC token will time out if the terraform deployment is delayed
