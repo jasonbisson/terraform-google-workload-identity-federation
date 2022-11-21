@@ -1,6 +1,6 @@
 # terraform-google-workload-identity-federation
 
-This module will will deploy a Workload Identity Pool, Provider, and Service Account that will be impersonated by an external identity. In addition a script is available to generate a OIDC token to run through the token exchange dance.
+This module will deploy a Workload Identity Pool, Provider, and Service Account that an external identity will impersonate. In addition, a python script is available to generate an OIDC token.
 
 The resources/services/activations/deletions that this module will create/trigger are:
 - Generate an Okta OIDC Token 
@@ -16,8 +16,8 @@ The resources/services/activations/deletions that this module will create/trigge
 1. Login to Okta admin console
 2. Go to Security->API
 3. Authorization Server
-4. Define a new authorization server , note the issuer URL — you’ll need this to configure OIDC provider in Google Cloud
-5. Set audience (could be anything that is mutually verifiable, preferably unique), note the audience — you’ll need this to configure OIDC provider in Google Cloud
+4. Define a new authorization server, note the issuer URL — you’ll need this to configure OIDC provider in Google Cloud
+5. Set audience (could be anything that is mutually verifiable, preferably unique), note the audience — you’ll need this to configure the OIDC provider in Google Cloud
 6. Define a new scope, set this scope as a default scope
 7. Define a new claim. Customize this claim to your requirement of attribute verification in Google Cloud
 8. Go to access policies, make sure its Assigned to “All Clients”
@@ -38,9 +38,9 @@ git clone https://github.com/jasonbisson/terraform-google-workload-identity-fede
 
 2. Rename and update required variables in terraform.tvfars.template 
 ```
-mv terraform.tvfars.template terraform.tvfars
+mv terraform.tfvars.template terraform.tvfars
 ```
-3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation creditial file
+3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation credential file
 ```
 cd terraform-google-workload-identity-federation/
 terraform init
@@ -59,10 +59,12 @@ python get_oidc_token.py
 cat /tmp/okta-token.json
 ```
 
-5. Deploy Storage Bucket with new Workload Identity creditial file
+5. Deploy Storage Bucket with new Workload Identity credential file
 ```
-cd terraform-google-workload-identity-federation/examples/simple_example
+cd ~/terraform-google-workload-identity-federation/examples/simple_example
 export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
+#Rename and update required project_id
+mv terraform.tfvars.template terraform.tvfars
 terraform init
 terraform plan
 terraform apply
@@ -78,7 +80,7 @@ principalSubject: "principal://iam.googleapis.com/projects/Your Project Number/l
 }authorizationInfo: [1]methodName: "storage.buckets.create"
 ```
 
-## Cleanup Workload Identity Federation Infrastructure and local token files
+## Destroy Workload Identity Federation Infrastructure and local token files
 1. Execute Terraform destroy command with existing identity (human or service account) 
 ```
 unset GOOGLE_APPLICATION_CREDENTIALS
