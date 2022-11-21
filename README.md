@@ -24,9 +24,9 @@ The resources/services/activations/deletions that this module will create/trigge
 
 ### Collect Okta variables for Google Cloud infrastructure deployment
 ```
-issuer_uri = ""
-subject =""
-allowed_audiences = [ "" ]
+issuer_uri = " Your Okta Authorization server "
+subject = " Subject of Okta Client ID "
+allowed_audiences = [ " Okta Authorization server allowed audience " ]
 ```
 
 ## Usage
