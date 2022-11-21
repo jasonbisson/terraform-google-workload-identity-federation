@@ -4,6 +4,7 @@ import os
 import json
 import requests
 import base64
+import secrets
 
 
 def get_okta_token():
@@ -13,7 +14,7 @@ def get_okta_token():
     encodedData = base64.b64encode(bytes(f"{client_id}:{client_secret}", "ISO-8859-1")).decode("ascii")
 
     cookies = {
-        'JSESSIONID': 'C4178E6BB95095E2E6652D69CC3B716A',
+        'JSESSIONID': secrets.token_urlsafe(33),
     }
 
     headers = {
