@@ -1,9 +1,7 @@
 #!/usr/bin/python
 # Okta oauth client credentials flow with Workflow identity federation
-import google.auth
 import os
 import json
-from google.auth import identity_pool
 import requests
 import http.client
 from pprint import pprint
