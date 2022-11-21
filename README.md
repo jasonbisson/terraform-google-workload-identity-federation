@@ -84,7 +84,7 @@ principalSubject: "principal://iam.googleapis.com/projects/Your Project Number/l
 1. Execute Terraform destroy command with existing identity (human or service account) 
 ```
 unset GOOGLE_APPLICATION_CREDENTIALS
-cd terraform-google-workload-identity-federation/
+cd ~/terraform-google-workload-identity-federation/
 terraform destroy
 rm /tmp/sts.json 
 rm /tmp/okta-token.json

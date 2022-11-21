@@ -12,4 +12,6 @@ attribute_mapping = {
 issuer_uri = ""
 subject =""
 
+allowed_audiences = [ "" ]
+
 
