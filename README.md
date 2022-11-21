@@ -38,11 +38,12 @@ git clone https://github.com/jasonbisson/terraform-google-workload-identity-fede
 
 2. Rename and update required variables in terraform.tvfars.template 
 ```
-mv terraform.tfvars.template terraform.tvfars
+mv terraform.tfvars.template terraform.tfvars
+#Update required variables 
 ```
 3. Execute Terraform commands with existing identity (human or service account) to build Workload Identity Infrastructure and the Workload Identity Federation credential file
 ```
-cd terraform-google-workload-identity-federation/
+cd ~/terraform-google-workload-identity-federation/
 terraform init
 terraform plan
 terraform apply
@@ -64,7 +65,8 @@ cat /tmp/okta-token.json
 cd ~/terraform-google-workload-identity-federation/examples/simple_example
 export GOOGLE_APPLICATION_CREDENTIALS="/tmp/sts.json"
 #Rename and update required project_id
-mv terraform.tfvars.template terraform.tvfars
+mv terraform.tfvars.template terraform.tfvars
+#Update required variables 
 terraform init
 terraform plan
 terraform apply
@@ -74,10 +76,8 @@ unset GOOGLE_APPLICATION_CREDENTIALS
 
 6. Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
 ```
-authenticationInfo: {
-principalEmail: "Your service account@Your Project ID.iam.gserviceaccount.com"serviceAccountDelegationInfo: [
-principalSubject: "principal://iam.googleapis.com/projects/Your Project Number/locations/global/workloadIdentityPools/Your IDP Provider/subject/Your subject"
-}authorizationInfo: [1]methodName: "storage.buckets.create"
+export project_id="Project id used to deploy Storage Bucket"
+gcloud logging read protoPayload.methodName="storage.buckets.create" --freshness=7d --project=${project_id} --format json |grep principalSubject
 ```
 
 ## Destroy Workload Identity Federation Infrastructure and local token files
