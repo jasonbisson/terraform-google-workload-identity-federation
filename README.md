@@ -2,6 +2,9 @@
 
 This module will deploy a Workload Identity Pool, Provider, and Service Account that an external identity will impersonate. In addition, a python script is available to generate an OIDC token.
 
+## Demo Reference Architecture
+![Reference Architecture](diagram/WIF.png)
+
 The resources/services/activations/deletions that this module will create/trigger are:
 - Generate an Okta OIDC Token
 - Create a Workload Identity Pool
