@@ -54,7 +54,7 @@ terraform apply
 Set required variables in Operating System
 export OKTA_AZ_SERVER="https://Your Okta Auth server/v1/token"
 export CLIENT_ID="Your Client ID"
-export CLIENT_SECRET="Your Client Secret or command to pull secret from a secrets manager platform"
+export CLIENT_SECRET="Your Client Secret" or export CLIENT_SECRET=$(gcloud secrets versions access latest --project your project id --secret="your secret name")
 cd files
 python get_oidc_token.py
 cat /tmp/okta-token.json
