@@ -80,7 +80,7 @@ unset GOOGLE_APPLICATION_CREDENTIALS
 6. Confirm Cloud logging audit event for Storage bucket used serviceAccountDelegationInfo
 ```
 export project_id="Project id used to deploy Storage Bucket"
-gcloud logging read protoPayload.methodName="storage.buckets.create" --freshness=7d --project=${project_id} --format json |grep principalSubject
+gcloud logging read protoPayload.methodName="storage.buckets.create" --freshness=1d --project=${project_id} --format json |grep principalSubject
 ```
 
 ## Destroy Workload Identity Federation Infrastructure and local token files
